@@ -1,47 +1,46 @@
 #include <Adafruit_Sensor.h>
 #include <ArduinoJson.h>
 
-const int gasSensor = A0;
+int switchPin = 5;
 
 // static DHT dht(DHT_PIN, DHT_TYPE); # DHT borte
 void initSensor()
 {
-    pinMode(gasSensor, INPUT);
+   pinMode(switchPin, INPUT);
 }
 
-float readGas() {
- float gasValue = analogRead (gasSensor);
- float returnValue = gasValue*0.004882814;
- return(returnValue);
+int readSwitch() {
+ int switchValue = digitalRead (switchPin);
+ return(switchValue);
 }
 
 
 bool readMessage(int messageId, char *payload)
 {
-    float gas = readGas();
+    int knapp = readSwitch();
     
     StaticJsonBuffer<MESSAGE_MAX_LEN> jsonBuffer;
     JsonObject &root = jsonBuffer.createObject();
     root["deviceId"] = DEVICE_ID;
     root["messageId"] = messageId;
-    bool gasAlert = false;
+    bool knappAlert = false;
 
     // NAN is not the valid json, change it to NULL
-    if (std::isnan(gas))
+    if (std::isnan(knapp))
     {
-        root["gas"] = NULL;
+        root["lyspaere"] = NULL;
     }
     else
     {
-        root["gas"] = gas;
-        if (gas > GAS_ALERT)
+        root["lyspaere"] = knapp;
+        if (knapp == KNAPP_ALERT)
         {
-            gasAlert = true;
+            knappAlert = true;
         }
     }
 
     root.printTo(payload, MESSAGE_MAX_LEN);
-    return gasAlert;
+    return knappAlert;
 }
 
 void parseTwinMessage(char *message)

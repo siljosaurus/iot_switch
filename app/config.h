@@ -6,10 +6,10 @@
 #define LED_PIN 0
 #define DHT_PIN 2
 
-#define GAS_ALERT 2.5
+#define KNAPP_ALERT 1
 
 // Interval time(ms) for sending message to IoT Hub
-#define INTERVAL 15000
+#define INTERVAL 1000
 
 // If don't have a physical DHT sensor, can send simulated data to IoT hub
 #define SIMULATED_DATA false
