@@ -54,6 +54,7 @@ void initWifi()
 void initTime()
 {
     time_t epochTime;
+
     configTime(0, 0, "pool.ntp.org", "time.nist.gov");
 
     while (true)
