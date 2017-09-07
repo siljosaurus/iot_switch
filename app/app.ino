@@ -3,6 +3,8 @@
 
 // Please use an Arduino IDE 1.6.8 or greater
 
+//Dette er en github test
+
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <WiFiUdp.h>
