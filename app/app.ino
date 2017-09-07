@@ -111,9 +111,9 @@ void loop()
     if (!messagePending && messageSending)
     {
         char messagePayload[MESSAGE_MAX_LEN];
-        bool temperatureAlert = readMessage(messageCount, messagePayload);
-        if (temperatureAlert) {
-          sendMessage(iotHubClientHandle, messagePayload, temperatureAlert);
+        bool knappAlert = readMessage(messageCount, messagePayload);
+        if (knappAlert) {
+          sendMessage(iotHubClientHandle, messagePayload, knappAlert);
         }
         messageCount++;
         delay(interval);
