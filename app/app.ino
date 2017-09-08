@@ -55,7 +55,7 @@ void initTime()
 {
     time_t epochTime;
 
-    configTime(0, 0, "pool.ntp.org", "time.nist.gov");
+    configTime(0, 0, "es.pool.ntp.org", "se.pool.ntp.org");
 
     while (true)
     {
