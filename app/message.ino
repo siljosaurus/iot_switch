@@ -15,7 +15,7 @@ int readSwitch() {
 }
 
 
-bool readMessage(int messageId, char *payload)
+bool readMessage(int messageId, float usedTime, char *payload)
 {
     int knapp = readSwitch();
     
@@ -37,6 +37,17 @@ bool readMessage(int messageId, char *payload)
         {
             knappAlert = true;
         }
+    }
+
+
+    //// TID
+        if (std::isnan(usedTime))
+    {
+        root["Tidsbruk"] = NULL;
+    }
+    else
+    {
+        root["Tidsbruk"] = usedTime;
     }
 
     root.printTo(payload, MESSAGE_MAX_LEN);

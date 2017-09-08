@@ -108,28 +108,49 @@ void setup()
 static int messageCount = 1;
 
 int previousState = 0;
+float startTime;
+float endTime;
 
-
-
+float usedTime;
 void loop()
 {
     if (!messagePending && messageSending) {
       
-        char messagePayload[MESSAGE_MAX_LEN];
-        bool knappAlert = readMessage(messageCount, messagePayload);
-
+       
         int currentState = readSwitch();
-        Serial.println(currentState);
+        //Serial.println(currentState);
         
-        if (currentState != previousState || messageCount == 1) {
-          previousState = currentState;
-          sendMessage(iotHubClientHandle, messagePayload, knappAlert);
-          messageCount++;
+        if (currentState != previousState) {
+
+          if (currentState == 1) {
+            startTime = millis();
+            //print(startTime);
+          } else if (currentState == 0) {
+            endTime = millis();
+            usedTime = (endTime - startTime);
+
+
+            Serial.print("Det tok: ");
+            Serial.print(usedTime / 1000);
+            Serial.println(" Sekunder");
+
+            char messagePayload[MESSAGE_MAX_LEN];
+            bool knappAlert = readMessage(messageCount, usedTime, messagePayload);
+
+            
+            sendMessage(iotHubClientHandle, messagePayload, knappAlert);
+            messageCount++;
+          }
+
+           previousState = currentState;
+
+           
+        
           
 
         }
         
-        delay(interval);
+       // delay(interval);
     }
     IoTHubClient_LL_DoWork(iotHubClientHandle);
     delay(10);
