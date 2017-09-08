@@ -106,16 +106,29 @@ void setup()
 }
 
 static int messageCount = 1;
+
+int previousState = 0;
+
+
+
 void loop()
 {
-    if (!messagePending && messageSending)
-    {
+    if (!messagePending && messageSending) {
+      
         char messagePayload[MESSAGE_MAX_LEN];
         bool knappAlert = readMessage(messageCount, messagePayload);
-        if (knappAlert) {
+
+        int currentState = readSwitch();
+        Serial.println(currentState);
+        
+        if (currentState != previousState || messageCount == 1) {
+          previousState = currentState;
           sendMessage(iotHubClientHandle, messagePayload, knappAlert);
+          messageCount++;
+          
+
         }
-        messageCount++;
+        
         delay(interval);
     }
     IoTHubClient_LL_DoWork(iotHubClientHandle);
