@@ -127,11 +127,11 @@ void loop()
             //print(startTime);
           } else if (currentState == 0) {
             endTime = millis();
-            usedTime = (endTime - startTime);
+            usedTime = (endTime - startTime) / 1000;
 
 
             Serial.print("Det tok: ");
-            Serial.print(usedTime / 1000);
+            Serial.print(usedTime);
             Serial.println(" Sekunder");
 
             char messagePayload[MESSAGE_MAX_LEN];
