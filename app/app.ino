@@ -55,7 +55,8 @@ void initTime()
 {
     time_t epochTime;
 
-    configTime(0, 0, "es.pool.ntp.org", "se.pool.ntp.org");
+
+    configTime(-7200000, 0,  "se.pool.ntp.org", "se.pool.ntp.org");
 
     while (true)
     {
@@ -104,7 +105,7 @@ void setup()
     IoTHubClient_LL_SetDeviceMethodCallback(iotHubClientHandle, deviceMethodCallback, NULL);
     IoTHubClient_LL_SetDeviceTwinCallback(iotHubClientHandle, twinCallback, NULL);
 }
-
+ 
 static int messageCount = 1;
 
 int previousState = 0;

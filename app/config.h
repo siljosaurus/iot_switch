@@ -1,10 +1,11 @@
 // Physical device information for board and sensor
-#define DEVICE_ID "02B"
+#define DEVICE_ID "Puma2500"
 #define DHT_TYPE DHT22
 
 // Pin layout configuration
 #define LED_PIN 0
 #define DHT_PIN 2
+
 
 #define KNAPP_ALERT 1
 
