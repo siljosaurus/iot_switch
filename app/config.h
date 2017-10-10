@@ -1,5 +1,5 @@
 // Physical device information for board and sensor
-#define DEVICE_ID "Puma2500"
+#define DEVICE_ID "02C"
 #define DHT_TYPE DHT22
 
 // Pin layout configuration

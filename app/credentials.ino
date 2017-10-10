@@ -23,13 +23,13 @@ void readCredentials()
     }
 
     // read from Serial and save to EEPROM
-    readFromSerial("Input your Wi-Fi SSID: ", ssid, SSID_LEN, 0);
+    readFromSerial("Skriv inn Wi-Fi SSID: ", ssid, SSID_LEN, 0);
     EEPROMWrite(ssidAddr, ssid, strlen(ssid));
 
-    readFromSerial("Input your Wi-Fi password: ", pass, PASS_LEN, 0);
+    readFromSerial("Skriv inn Wi-Fi passord: ", pass, PASS_LEN, 0);
     EEPROMWrite(passAddr, pass, strlen(pass));
 
-    readFromSerial("Input your Azure IoT hub device connection string: ", connectionString, CONNECTION_STRING_LEN, 0);
+    readFromSerial("Skriv inn Azure IoT hub device connection string: ", connectionString, CONNECTION_STRING_LEN, 0);
     EEPROMWrite(connectionStringAddr, connectionString, strlen(connectionString));
 }
 

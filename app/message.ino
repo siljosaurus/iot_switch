@@ -2,6 +2,7 @@
 #include <ArduinoJson.h>
 
 int switchPin = 5;
+int yellowPin = 4;
 
 // static DHT dht(DHT_PIN, DHT_TYPE); # DHT borte
 void initSensor()
@@ -9,15 +10,18 @@ void initSensor()
    pinMode(switchPin, INPUT);
 }
 
-int readSwitch() {
- int switchValue = digitalRead (switchPin);
- return(switchValue);
+int readSwitchForGreenTime() {
+    int switchValue = digitalRead (switchPin);
+    return(switchValue);
+}
+int readSwitchForYellowTime() {
+    int switchValue = digitalRead (yellowPin);
+    return switchValue;
 }
 
 
 bool readMessage(int messageId, float usedTime, char *payload)
 {
-    int knapp = readSwitch();
     
     StaticJsonBuffer<MESSAGE_MAX_LEN> jsonBuffer;
     JsonObject &root = jsonBuffer.createObject();
@@ -25,22 +29,8 @@ bool readMessage(int messageId, float usedTime, char *payload)
     root["messageId"] = messageId;
     bool knappAlert = false;
 
-    // NAN is not the valid json, change it to NULL
-    if (std::isnan(knapp))
-    {
-        root["lyspaere"] = NULL;
-    }
-    else
-    {
-        root["lyspaere"] = knapp;
-        if (knapp == KNAPP_ALERT)
-        {
-            knappAlert = true;
-        }
-    }
 
-
-    //// TID
+    //// PUSHER: tidsbruk
         if (std::isnan(usedTime))
     {
         root["Tidsbruk"] = NULL;

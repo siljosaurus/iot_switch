@@ -1,8 +1,3 @@
-// Copyright (c) Microsoft. All rights reserved.
-// Licensed under the MIT license. See LICENSE file in the project root for full license information.
-
-// Please use an Arduino IDE 1.6.8 or greater
-
 #include <ESP8266WiFi.h>
 #include <WiFiClientSecure.h>
 #include <WiFiUdp.h>
@@ -32,7 +27,7 @@ void blinkLED()
 void initWifi()
 {
     // Attempt to connect to Wifi network:
-    Serial.printf("Attempting to connect to SSID: %s.\r\n", ssid);
+    Serial.printf("Prøver å koble til SSID: %s.\r\n", ssid);
 
     // Connect to WPA/WPA2 network. Change this line if using open or WEP network:
     WiFi.begin(ssid, pass);
@@ -118,9 +113,9 @@ void loop()
     if (!messagePending && messageSending) {
       
        
-        int currentState = readSwitch();
+        int currentState = readSwitchForGreenTime();
         //Serial.println(currentState);
-        
+
         if (currentState != previousState) {
 
           if (currentState == 1) {
@@ -128,12 +123,14 @@ void loop()
             //print(startTime);
           } else if (currentState == 0) {
             endTime = millis();
-            usedTime = (endTime - startTime) / 1000;
+            float usedTimeSeconds = (endTime - startTime) / 1000;
+            usedTime = (usedTimeSeconds/60)/60;
+
 
 
             Serial.print("Det tok: ");
             Serial.print(usedTime);
-            Serial.println(" Sekunder");
+            Serial.println(" Timer");
 
             char messagePayload[MESSAGE_MAX_LEN];
             bool knappAlert = readMessage(messageCount, usedTime, messagePayload);
@@ -141,7 +138,9 @@ void loop()
             
             sendMessage(iotHubClientHandle, messagePayload, knappAlert);
             messageCount++;
-          }
+          
+
+
 
            previousState = currentState;
 
