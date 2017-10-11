@@ -1,8 +1,7 @@
 #include <EEPROM.h>
 
 // Read parameters from EEPROM or Serial
-void readCredentials()
-{
+void readCredentials() {
     int ssidAddr = 0;
     int passAddr = ssidAddr + SSID_LEN;
     int connectionStringAddr = passAddr + SSID_LEN;
@@ -17,8 +16,7 @@ void readCredentials()
     int passLength = EEPROMread(passAddr, pass);
     int connectionStringLength = EEPROMread(connectionStringAddr, connectionString);
 
-    if (ssidLength > 0 && passLength > 0 && connectionStringLength > 0 && !needEraseEEPROM())
-    {
+    if (ssidLength > 0 && passLength > 0 && connectionStringLength > 0 && !needEraseEEPROM()) {
         return;
     }
 

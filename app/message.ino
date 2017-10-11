@@ -5,9 +5,9 @@ int switchPin = 5;
 int yellowPin = 4;
 
 // static DHT dht(DHT_PIN, DHT_TYPE); # DHT borte
-void initSensor()
-{
+void initSensor() {
    pinMode(switchPin, INPUT);
+   pinMode(yellowPin, INPUT);
 }
 
 int readSwitchForGreenTime() {
@@ -20,8 +20,7 @@ int readSwitchForYellowTime() {
 }
 
 
-bool readMessage(int messageId, float usedTime, char *payload)
-{
+bool readMessage(int messageId, float usedTimeGreen, float usedTimeYellow, char *payload) {
     
     StaticJsonBuffer<MESSAGE_MAX_LEN> jsonBuffer;
     JsonObject &root = jsonBuffer.createObject();
@@ -30,22 +29,28 @@ bool readMessage(int messageId, float usedTime, char *payload)
     bool knappAlert = false;
 
 
-    //// PUSHER: tidsbruk
-        if (std::isnan(usedTime))
-    {
+    // PUSHER: Grønn Tid
+    if (std::isnan(usedTimeGreen)) {
         root["Tidsbruk"] = NULL;
     }
-    else
-    {
-        root["Tidsbruk"] = usedTime;
+    else { 
+        root["Tidsbruk"] = usedTimeGreen;
     }
+
+        // PUSHER: Gul tid
+    if (std::isnan(usedTimeYellow)) {
+        root["Ventemodus"] = NULL;
+     }  else  {
+        root["Ventemodus"] = usedTimeYellow;
+    }
+    
 
     root.printTo(payload, MESSAGE_MAX_LEN);
     return knappAlert;
 }
 
-void parseTwinMessage(char *message)
-{
+void parseTwinMessage(char *message) {
+    
     StaticJsonBuffer<MESSAGE_MAX_LEN> jsonBuffer;
     JsonObject &root = jsonBuffer.parseObject(message);
     if (!root.success())

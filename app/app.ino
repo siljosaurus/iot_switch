@@ -70,9 +70,10 @@ void initTime()
     }
 }
 
+
+
 static IOTHUB_CLIENT_LL_HANDLE iotHubClientHandle;
-void setup()
-{
+void setup() {
     pinMode(LED_PIN, OUTPUT);
 
     initSerial();
@@ -103,55 +104,80 @@ void setup()
  
 static int messageCount = 1;
 
-int previousState = 0;
+int previousStateGreen = 0;
 float startTime;
 float endTime;
-
 float usedTime;
-void loop()
-{
+
+int previousStateYellow = 0;
+float startTimeYellow;
+float endTimeYellow;
+float usedTimeYellow;
+
+
+
+void loop() {
     if (!messagePending && messageSending) {
       
        
-        int currentState = readSwitchForGreenTime();
-        //Serial.println(currentState);
+        int currentStateGreen = readSwitchForGreenTime();
+        int currentStateYellow = readSwitchForYellowTime();
+        //Serial.println(currentStateGreen);
 
-        if (currentState != previousState) {
+        if (currentStateGreen != previousStateGreen) {
 
-          if (currentState == 1) {
+          if (currentStateGreen == 1) {
             startTime = millis();
             //print(startTime);
-          } else if (currentState == 0) {
+          } else if (currentStateGreen == 0) {
             endTime = millis();
             float usedTimeSeconds = (endTime - startTime) / 1000;
             usedTime = (usedTimeSeconds/60)/60;
 
 
 
-            Serial.print("Det tok: ");
-            Serial.print(usedTime);
-            Serial.println(" Timer");
+            Serial.print("Aktiv Tid: ");
+            Serial.print(usedTimeSeconds);
+            Serial.println(" Sekunder");
 
             char messagePayload[MESSAGE_MAX_LEN];
-            bool knappAlert = readMessage(messageCount, usedTime, messagePayload);
+            bool knappAlert = readMessage(messageCount, usedTime, NULL, messagePayload);
 
             
             sendMessage(iotHubClientHandle, messagePayload, knappAlert);
             messageCount++;
-          
-
-
-
-           previousState = currentState;
-
-           
         
-          
-
+           previousStateGreen = currentStateGreen;
         }
-        
-       // delay(interval);
+
+        if (currentStateYellow != previousStateYellow) {
+
+            if (currentStateYellow == 1) {
+                startTimeYellow = millis();
+            } else if (currentStateYellow == 0) {
+
+                endTimeYellow = millis();
+                float usedTimeSeconds = (endTimeYellow - startTimeYellow)/1000;
+                usedTimeYellow = (usedTimeSeconds/60)/60;
+
+
+                Serial.print("Ventemodus tid: ");
+                Serial.print(usedTimeSeconds);
+                Serial.println(" Sekunder");
+    
+                char messagePayload[MESSAGE_MAX_LEN];
+                bool knappAlert = readMessage(messageCount, NULL, usedTimeYellow, messagePayload);
+    
+                
+                sendMessage(iotHubClientHandle, messagePayload, knappAlert);
+                messageCount++;
+
+                previousStateYellow = currentStateYellow;
+                
+            }
+        } 
     }
     IoTHubClient_LL_DoWork(iotHubClientHandle);
     delay(10);
+}
 }

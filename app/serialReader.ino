@@ -1,5 +1,4 @@
-void initSerial()
-{
+void initSerial() {
     // Start serial and initialize stdout
     Serial.begin(115200);
     Serial.setDebugOutput(true);
@@ -14,8 +13,7 @@ void initSerial()
  *        timeout  - If after timeout(ms), return false with nothing saved to buf.
  *                   If no timeout <= 0, this function will not return until there is something read.
  */
-bool readFromSerial(char * prompt, char * buf, int maxLen, int timeout)
-{
+bool readFromSerial(char * prompt, char * buf, int maxLen, int timeout) {
     int timer = 0, delayTime = 1000;
     String input = "";
     if(maxLen <= 0)
